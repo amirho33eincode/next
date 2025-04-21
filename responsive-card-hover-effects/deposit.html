@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USDT_Tether</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header>
+            <div class="back-button" onclick="window.location.href='balance.html'">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <h1>USDT_Tether</h1>
+            <div class="header-actions">
+                <i class="fas fa-question-circle"></i>
+                <i class="fas fa-file-alt"></i>
+            </div>
+        </header>
+
+        <!-- Network Selection -->
+        <div class="network-section">
+            <label>Network</label>
+            <div class="network-selector">
+                <select id="network">
+                    <option value="BEP20">BEP20 (BSC)</option>
+                </select>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Deposit Section -->
+            <section id="deposit-section">
+                <div class="qr-container">
+                    <div id="qr-code"></div>
+                </div>
+
+                <div class="address-section">
+                    <label>Address Management</label>
+                    <div class="address-box">
+                        <span id="wallet-address">0x74eee2bff3065e985698350eca2042b627313db1</span>
+                        <button id="copy-btn" class="copy-btn">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-item">
+                        <label>Min. deposit</label>
+                        <span>0.0001 USDT</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Deposit Confirmation</label>
+                        <span>15 Network confirmations</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Contract information</label>
+                        <div class="contract-info">
+                            <span>Ending in 197955</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Withdraw Section -->
+            <section id="withdraw-section" style="display: none;">
+                <div class="form-group">
+                    <label>Withdrawal Address</label>
+                    <div class="input-group">
+                        <input type="text" id="withdraw-address" placeholder="Please enter the address">
+                        <button class="address-action">
+                            <i class="fas fa-paste"></i>
+                        </button>
+                        <button class="address-action">
+                            <i class="fas fa-qrcode"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Withdrawal Amount</label>
+                    <div class="amount-input">
+                        <input type="number" id="withdraw-amount" placeholder=">0">
+                        <div class="amount-suffix">
+                            <span>USDT</span>
+                            <button class="max-btn">All</button>
+                        </div>
+                    </div>
+                    <div class="available-balance">
+                        Withdrawable <span id="available-amount">0.10927 USDT</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Note (optional)</label>
+                    <input type="text" id="withdraw-note" placeholder="Enter a note">
+                </div>
+
+                <div class="fee-section">
+                    <div class="fee-item">
+                        <span>Received Amount</span>
+                        <span id="received-amount">- USDT</span>
+                    </div>
+                    <div class="fee-item">
+                        <span>Fee</span>
+                        <span id="fee-amount">-</span>
+                    </div>
+                </div>
+
+                <button class="submit-btn" onclick="handleWithdraw()">Submit</button>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Initialize QR Code
+        const qr = new QRCode(document.getElementById('qr-code'), {
+            text: document.getElementById('wallet-address').textContent,
+            width: 180,
+            height: 180,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        // Copy address functionality
+        document.getElementById('copy-btn').addEventListener('click', async () => {
+            const address = document.getElementById('wallet-address').textContent;
+            try {
+                await navigator.clipboard.writeText(address);
+                const copyBtn = document.getElementById('copy-btn');
+                const icon = copyBtn.querySelector('i');
+                icon.className = 'fas fa-check';
+                setTimeout(() => {
+                    icon.className = 'fas fa-copy';
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet Balance</title>
+    <link rel="stylesheet" href="assetsnavbar/css/styles.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Navigation Styles */
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1E1E1E;
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav__list {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav__link {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav__link:hover,
+        .nav__link.active-link {
+            color: #007AFF;
+        }
+
+        .nav__expand {
+            background-color: #007AFF;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .nav__expand:hover {
+            transform: scale(1.1);
+        }
+
+        .nav__expand-icon {
+            font-size: 1.5rem;
+        }
+
+        .wallet-container {
+            background-color: #1E1E1E;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 80px;
+        }
+
+        /* Rest of the wallet-specific styles... */
+    </style>
+</head>
+<body>
+    <div class="wallet-container">
+        <!-- Header -->
+        <header>
+            <div class="back-button" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <h1>Balance</h1>
+            <div class="header-actions">
+                <i class="fas fa-sync-alt" onclick="refreshBalance()"></i>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div class="balance-header">
+                    <div class="balance-label">Total Balance</div>
+                    <div class="balance-actions">
+                        <div class="currency-selector">
+                            <button class="currency-btn" onclick="toggleCurrency()">
+                                <i class="fas fa-dollar-sign"></i>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="currency-options">
+                                <button onclick="changeCurrency('USD')">
+                                    <i class="fas fa-dollar-sign"></i> USD
+                                </button>
+                                <button onclick="changeCurrency('BTC')">
+                                    <i class="fab fa-bitcoin"></i> BTC
+                                </button>
+                                <button onclick="changeCurrency('USDT')">
+                                    <i class="fas fa-coins"></i> USDT
+                                </button>
+                            </div>
+                        </div>
+                        <button class="toggle-balance" onclick="toggleBalanceVisibility()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="balance-amount" id="total-balance">100.0 USDT</div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-button deposit-btn" onclick="window.location.href='deposit.html'">
+                    <i class="fas fa-arrow-down"></i>
+                    Deposit
+                </button>
+                <button class="action-button withdraw-btn" onclick="window.location.href='withdraw.html'">
+                    <i class="fas fa-arrow-up"></i>
+                    Withdraw
+                </button>
+            </div>
+
+            <!-- Transactions -->
+            <div class="transactions">
+                <h2>Recent Transactions</h2>
+                <div id="transactions-list">
+                    <!-- Transactions will be populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <nav class="nav">
+        <ul class="nav__list">
+            <li>
+                <a href="index.html" class="nav__link">
+                    <i class="ri-home-smile-2-line"></i>
+                </a>
+            </li>
+
+            <li>
+                <a href="balance.html" class="nav__link active-link">
+                    <i class="ri-user-line"></i>
+                </a>
+            </li>
+
+            <li>
+                <button class="nav__expand" id="nav-expand">
+                    <i class="ri-add-line nav__expand-icon" id="nav-expand-icon"></i>
+                </button>
+            </li>
+        
+            <li>
+                <a href="project.html" class="nav__link">
+                    <i class="ri-briefcase-line"></i>
+                </a>
+            </li>
+
+            <li>
+                <a href="contact.html" class="nav__link">
+                    <i class="ri-send-plane-line"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <script>
+        // Get wallet state from the main script
+        let walletState = window.opener ? window.opener.walletState : {
+            balance: 15000.00,
+            transactions: []
+        };
+
+        let currentCurrency = 'USDT';
+        let isBalanceVisible = true;
+        const exchangeRates = {
+            USD: 1,
+            BTC: 0.000025,
+            USDT: 1
+        };
+
+        // Update balance display
+        function updateBalance() {
+            const balanceElement = document.getElementById('total-balance');
+            const convertedBalance = walletState.balance * exchangeRates[currentCurrency];
+            
+            if (isBalanceVisible) {
+                balanceElement.textContent = `${convertedBalance.toFixed(2)} ${currentCurrency}`;
+            } else {
+                balanceElement.textContent = '******';
+            }
+            
+            updateTransactionsList();
+        }
+
+        // Toggle balance visibility
+        function toggleBalanceVisibility() {
+            isBalanceVisible = !isBalanceVisible;
+            const eyeIcon = document.querySelector('.toggle-balance i');
+            eyeIcon.className = isBalanceVisible ? 'fas fa-eye' : 'fas fa-eye-slash';
+            updateBalance();
+        }
+
+        // Toggle currency selector
+        function toggleCurrency() {
+            const options = document.querySelector('.currency-options');
+            options.classList.toggle('show');
+        }
+
+        // Change currency
+        function changeCurrency(currency) {
+            currentCurrency = currency;
+            const currencyBtn = document.querySelector('.currency-btn i:first-child');
+            
+            switch(currency) {
+                case 'USD':
+                    currencyBtn.className = 'fas fa-dollar-sign';
+                    break;
+                case 'BTC':
+                    currencyBtn.className = 'fab fa-bitcoin';
+                    break;
+                case 'USDT':
+                    currencyBtn.className = 'fas fa-coins';
+                    break;
+            }
+            
+            document.querySelector('.currency-options').classList.remove('show');
+            updateBalance();
+        }
+
+        // Refresh balance
+        function refreshBalance() {
+            const refreshIcon = document.querySelector('.fa-sync-alt');
+            refreshIcon.style.animation = 'rotate 1s linear';
+            setTimeout(() => {
+                refreshIcon.style.animation = '';
+                updateBalance();
+            }, 1000);
+        }
+
+        // Show withdraw section
+        function showWithdrawSection() {
+            // Navigate to index.html and show withdraw section
+            window.location.href = 'index.html#withdraw';
+        }
+
+        // Update transactions list
+        function updateTransactionsList() {
+            const transactionsList = document.getElementById('transactions-list');
+            transactionsList.innerHTML = '';
+
+            const recentTransactions = [...walletState.transactions].reverse().slice(0, 10);
+
+            recentTransactions.forEach(transaction => {
+                const transactionEl = document.createElement('div');
+                transactionEl.className = 'transaction-item';
+                
+                const isDeposit = transaction.type === 'deposit';
+                const amount = isDeposit ? transaction.amount : -(transaction.amount + transaction.fee);
+                const convertedAmount = amount * exchangeRates[currentCurrency];
+
+                transactionEl.innerHTML = `
+                    <div class="transaction-info">
+                        <div class="transaction-icon">
+                            <i class="fas fa-${isDeposit ? 'arrow-down' : 'arrow-up'}"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <span class="transaction-type">${isDeposit ? 'Deposit' : 'Withdrawal'}</span>
+                            <span class="transaction-date">${new Date(transaction.timestamp).toLocaleString()}</span>
+                            <span class="network-badge">${transaction.network}</span>
+                        </div>
+                    </div>
+                    <div class="transaction-amount ${isDeposit ? 'positive' : 'negative'}">
+                        ${isDeposit ? '+' : '-'}${Math.abs(convertedAmount).toFixed(2)} ${currentCurrency}
+                    </div>
+                `;
+
+                transactionsList.appendChild(transactionEl);
+            });
+
+            if (recentTransactions.length === 0) {
+                transactionsList.innerHTML = '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">No transactions yet</div>';
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBalance();
+        });
+
+        // Close currency selector when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.currency-selector')) {
+                document.querySelector('.currency-options').classList.remove('show');
+            }
+        });
+
+        // Add rotation animation
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                @keyframes rotate {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+            </style>
+        `);
+
+        // Navigation expand functionality
+        const navExpand = document.getElementById('nav-expand');
+        const navExpandIcon = document.getElementById('nav-expand-icon');
+
+        navExpand.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html> 

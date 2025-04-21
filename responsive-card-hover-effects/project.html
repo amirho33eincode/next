@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Reviews</title>
+    <link rel="stylesheet" href="assetsnavbar/css/styles.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Navigation Styles */
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1E1E1E;
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav__list {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav__link {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav__link:hover,
+        .nav__link.active-link {
+            color: #007AFF;
+        }
+
+        .nav__expand {
+            background-color: #007AFF;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .nav__expand:hover {
+            transform: scale(1.1);
+        }
+
+        .nav__expand-icon {
+            font-size: 1.5rem;
+        }
+
+        .project-container {
+            background-color: #1E1E1E;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 80px;
+        }
+
+        /* Rest of the project-specific styles... */
+    </style>
+</head>
+<body>
+    <div class="project-container">
+        <!-- Header -->
+        <header>
+            <div class="back-button" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <h1>Project Reviews</h1>
+            <div class="header-actions">
+                <i class="fas fa-star"></i>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Introduction Section -->
+            <div class="intro-section">
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <div class="stat-value">4.8</div>
+                        <div class="stat-label">Average Rating</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="stat-value">1.2K</div>
+                        <div class="stat-label">Total Reviews</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="stat-value">98%</div>
+                        <div class="stat-label">Satisfaction</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Slider -->
+            <div class="comments-slider">
+                <div class="slider-container">
+                    <div class="slider-track">
+                        <!-- Comment 1 -->
+                        <div class="comment-card">
+                            <div class="user-profile">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Profile" class="profile-picture">
+                                <div class="user-info">
+                                    <h3>John Smith</h3>
+                                    <div class="rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <span>4.5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="comment-text">"This project has exceeded my expectations. The team delivered high-quality work and maintained excellent communication throughout the process. Highly recommended!"</p>
+                            <div class="comment-footer">
+                                <span class="comment-date">2 days ago</span>
+                                <button class="like-btn"><i class="far fa-thumbs-up"></i> 24</button>
+                            </div>
+                        </div>
+
+                        <!-- Comment 2 -->
+                        <div class="comment-card">
+                            <div class="user-profile">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User Profile" class="profile-picture">
+                                <div class="user-info">
+                                    <h3>Sarah Johnson</h3>
+                                    <div class="rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <span>5.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="comment-text">"Outstanding service! The team was professional, efficient, and delivered exactly what we needed. Will definitely work with them again for future projects."</p>
+                            <div class="comment-footer">
+                                <span class="comment-date">1 week ago</span>
+                                <button class="like-btn"><i class="far fa-thumbs-up"></i> 18</button>
+                            </div>
+                        </div>
+
+                        <!-- Comment 3 -->
+                        <div class="comment-card">
+                            <div class="user-profile">
+                                <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="User Profile" class="profile-picture">
+                                <div class="user-info">
+                                    <h3>Michael Brown</h3>
+                                    <div class="rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                        <span>4.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="comment-text">"Great experience overall. The project was completed on time and the team was very responsive to our needs. Would recommend to others."</p>
+                            <div class="comment-footer">
+                                <span class="comment-date">2 weeks ago</span>
+                                <button class="like-btn"><i class="far fa-thumbs-up"></i> 12</button>
+                            </div>
+                        </div>
+
+                        <!-- Comment 4 -->
+                        <div class="comment-card">
+                            <div class="user-profile">
+                                <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="User Profile" class="profile-picture">
+                                <div class="user-info">
+                                    <h3>Emily Davis</h3>
+                                    <div class="rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <span>4.5</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="comment-text">"The team was very professional and delivered excellent results. They were always available to answer questions and made sure we were satisfied with the final product."</p>
+                            <div class="comment-footer">
+                                <span class="comment-date">3 weeks ago</span>
+                                <button class="like-btn"><i class="far fa-thumbs-up"></i> 8</button>
+                            </div>
+                        </div>
+
+                        <!-- Comment 5 -->
+                        <div class="comment-card">
+                            <div class="user-profile">
+                                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="User Profile" class="profile-picture">
+                                <div class="user-info">
+                                    <h3>David Wilson</h3>
+                                    <div class="rating">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <span>5.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="comment-text">"Absolutely fantastic experience! The team went above and beyond to ensure our project was a success. Their attention to detail and professionalism was impressive."</p>
+                            <div class="comment-footer">
+                                <span class="comment-date">1 month ago</span>
+                                <button class="like-btn"><i class="far fa-thumbs-up"></i> 15</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-controls">
+                    <button class="slider-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <nav class="nav">
+        <ul class="nav__list">
+            <li>
+                <a href="index.html" class="nav__link">
+                    <i class="ri-home-smile-2-line"></i>
+                </a>
+            </li>
+
+            <li>
+                <a href="balance.html" class="nav__link">
+                    <i class="ri-user-line"></i>
+                </a>
+            </li>
+
+            <li>
+                <button class="nav__expand" id="nav-expand">
+                    <i class="ri-add-line nav__expand-icon" id="nav-expand-icon"></i>
+                </button>
+            </li>
+        
+            <li>
+                <a href="project.html" class="nav__link active-link">
+                    <i class="ri-briefcase-line"></i>
+                </a>
+            </li>
+
+            <li>
+                <a href="contact.html" class="nav__link">
+                    <i class="ri-send-plane-line"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <script>
+        // Slider functionality
+        const slider = document.querySelector('.slider-track');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const commentCards = document.querySelectorAll('.comment-card');
+        let currentIndex = 0;
+        let autoSlideInterval;
+
+        function updateSlider() {
+            const cardWidth = commentCards[0].offsetWidth;
+            slider.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % commentCards.length;
+            updateSlider();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + commentCards.length) % commentCards.length;
+            updateSlider();
+        }
+
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(nextSlide, 2000); // Change slide every 2 seconds
+        }
+
+        function stopAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+
+        // Event listeners
+        nextBtn.addEventListener('click', () => {
+            stopAutoSlide();
+            nextSlide();
+            startAutoSlide();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            stopAutoSlide();
+            prevSlide();
+            startAutoSlide();
+        });
+
+        // Start auto-sliding
+        startAutoSlide();
+
+        // Pause auto-slide on hover
+        slider.addEventListener('mouseenter', stopAutoSlide);
+        slider.addEventListener('mouseleave', startAutoSlide);
+
+        // Like button functionality
+        document.querySelectorAll('.like-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const count = parseInt(this.textContent.match(/\d+/)[0]);
+                
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    this.textContent = `👍 ${count + 1}`;
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    this.textContent = `👍 ${count - 1}`;
+                }
+            });
+        });
+
+        // Navigation expand functionality
+        const navExpand = document.getElementById('nav-expand');
+        const navExpandIcon = document.getElementById('nav-expand-icon');
+
+        navExpand.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html> 

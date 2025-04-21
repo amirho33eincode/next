@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">       
+        <!--=============== REMIXICONS ===============-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css">
+
+        <!--=============== CSS ===============-->
+        <link rel="stylesheet" href="assetsnavbar/css/styles.css">
+        <!--=============== CSS ===============-->
+        <link rel="stylesheet" href="assets/css/styles.css">
+
+        <title>FindNext Broker</title>
+        
+        <style>
+            .logo-container {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1000;
+            }
+
+            .logo {
+                width: 150px;
+                height: auto;
+            }
+
+            .user-profile {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #1E1E1E;
+                padding: 16px;
+                border-radius: 12px;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                z-index: 1000;
+                display: none;
+            }
+
+            .user-profile.active {
+                display: block;
+            }
+
+            .profile-header {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+
+            .profile-avatar {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                background-color: #007AFF;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .profile-info {
+                flex: 1;
+            }
+
+            .profile-name {
+                color: white;
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+
+            .profile-email {
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 14px;
+            }
+
+            .profile-actions {
+                display: flex;
+                gap: 8px;
+            }
+
+            .profile-button {
+                flex: 1;
+                padding: 8px 16px;
+                border-radius: 8px;
+                border: none;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                background-color: #2C2C2C;
+                color: white;
+            }
+
+            .profile-button:hover {
+                background-color: #3C3C3C;
+            }
+
+            .profile-button.logout {
+                background-color: #FF3B30;
+            }
+
+            .profile-button.logout:hover {
+                background-color: #FF5A52;
+            }
+
+            .insufficient-balance-popup {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #1E1E1E;
+                padding: 24px;
+                border-radius: 16px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                text-align: center;
+                z-index: 1000;
+                max-width: 400px;
+                width: 90%;
+            }
+
+            .insufficient-balance-popup h2 {
+                color: #FFFFFF;
+                margin-bottom: 16px;
+                font-size: 20px;
+            }
+
+            .insufficient-balance-popup p {
+                color: rgba(255, 255, 255, 0.7);
+                margin-bottom: 24px;
+                font-size: 16px;
+                line-height: 1.5;
+            }
+
+            .insufficient-balance-popup .buttons {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+            }
+
+            .insufficient-balance-popup button {
+                padding: 12px 24px;
+                border-radius: 12px;
+                border: none;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .insufficient-balance-popup .deposit-btn {
+                background-color: #007AFF;
+                color: white;
+            }
+
+            .insufficient-balance-popup .cancel-btn {
+                background-color: #2C2C2C;
+                color: white;
+            }
+
+            .insufficient-balance-popup button:hover {
+                transform: translateY(-2px);
+            }
+
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="ff.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        
+        <!-- Logo Section -->
+        <div class="logo-container">
+            <img src="assets/logofund.png" alt="FindNext Broker" class="logo">
+        </div>
+
+        <!-- User Profile Section -->
+        <div class="user-profile" id="userProfile">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">U</div>
+                <div class="profile-info">
+                    <div class="profile-name" id="profileName">User Name</div>
+                    <div class="profile-email" id="profileEmail">user@example.com</div>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <button class="profile-button" onclick="navigateToBalance()">Wallet</button>
+                <button class="profile-button logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Insufficient Balance Popup -->
+        <div class="overlay" id="overlay"></div>
+        <div class="insufficient-balance-popup" id="insufficientBalancePopup">
+            <h2>Insufficient Balance</h2>
+            <p>You don't have enough balance to use this service. Please deposit funds first to continue.</p>
+            <div class="buttons">
+                <button class="deposit-btn" onclick="navigateToDeposit()">Deposit Now</button>
+                <button class="cancel-btn" onclick="closePopup()">Cancel</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card__container">
+               <article class="card__article">
+                     <div class="card__data">
+                        <img src="assets/img/img1.png" alt="card image" class="card__img">
+
+                        <h1 class="card__title">$15000</h1>
+                        <p class="card__description card__profit">+10% Profit</p>
+                        <button class="card__button" id="fuckBtn" onclick="checkBalance(119)">$119</button>
+                     </div>
+
+                     <div class="card__shapes">
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                     </div>
+               </article>
+
+               <article class="card__article">
+                     <div class="card__data">
+                        <img src="assets/img/img2.png" alt="card image" class="card__img">
+
+                        <h1 class="card__title">$25000</h1>
+                        <p class="card__description card__profit">+10% Profit</p>
+                        <button class="card__button" id="fuckBtn1" onclick="checkBalance(199)">$199</button>
+                     </div>
+
+                     <div class="card__shapes">
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                     </div>
+               </article>
+
+               <article class="card__article">
+                     <div class="card__data">
+                        <img src="assets/img/img3.png" alt="card image" class="card__img">
+
+                        <h1 class="card__title">50000$</h1>
+                        <p class="card__description card__profit">+10% Profit</p>
+                        <button class="card__button" id="fuckBtn2" onclick="checkBalance(299)">$299</button>
+                     </div>
+
+                     <div class="card__shapes">
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                        <span class="card__shape"></span>
+                     </div>
+               </article>
+            </div>
+         </div>
+
+        <!--=============== NAVBAR ===============-->
+        <nav class="nav">
+            <ul class="nav__list">
+                <li>
+                    <a href="#home" class="nav__link active-link">
+                        <i class="ri-home-smile-2-line"></i>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#about" class="nav__link" onclick="navigateToBalance()">
+                        <i class="ri-user-line"></i>
+                    </a>
+                </li>
+
+                <li>
+                    <button class="nav__expand" id="nav-expand">
+                        <i class="ri-add-line nav__expand-icon" id="nav-expand-icon"></i>
+                    </button>
+                </li>
+            
+                <li>
+                    <a href="#projects" class="nav__link" onclick="navigateToProjects()">
+                        <i class="ri-briefcase-line"></i>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#contact" class="nav__link" onclick="navigateToContact()">
+                        <i class="ri-send-plane-line"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <script>
+            // Check if user is logged in
+            document.addEventListener('DOMContentLoaded', async function() {
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (user) {
+                    // Show user profile
+                    document.getElementById('userProfile').classList.add('active');
+                    
+                    // Set user information
+                    document.getElementById('profileName').textContent = user.user_metadata?.full_name || 'User';
+                    document.getElementById('profileEmail').textContent = user.email;
+                    
+                    // Set avatar initial
+                    const avatarInitial = user.user_metadata?.full_name?.[0] || user.email[0];
+                    document.getElementById('profileAvatar').textContent = avatarInitial.toUpperCase();
+                }
+            });
+
+            // Logout function
+            async function logout() {
+                const { error } = await supabase.auth.signOut();
+                if (!error) {
+                    window.location.href = 'login.html';
+                }
+            }
+
+            // Navigation functions
+            function navigateToDeposit() {
+                window.location.href = 'deposit.html';
+            }
+
+            function navigateToBalance() {
+                window.location.href = 'balance.html';
+            }
+
+            function navigateToProjects() {
+                window.location.href = 'project.html';
+            }
+
+            function navigateToContact() {
+                window.location.href = 'contact.html';
+            }
+
+            function showPopup() {
+                document.getElementById('overlay').style.display = 'block';
+                document.getElementById('insufficientBalancePopup').style.display = 'block';
+            }
+
+            function closePopup() {
+                document.getElementById('overlay').style.display = 'none';
+                document.getElementById('insufficientBalancePopup').style.display = 'none';
+            }
+
+            function checkBalance(amount) {
+                console.log(amount)
+                if (amount == 37) {
+                    // For $37 button, always go to balance page
+                    window.location.href = 'balance.html';
+                    return;
+                }
+                
+                // Get the current balance from localStorage or default to 0
+                const currentBalance = parseFloat(localStorage.getItem('walletBalance')) || 0;
+                
+                if (currentBalance >= amount) {
+                    // If user has enough balance, proceed to withdrawal
+                    window.location.href = 'withdrawal.html';
+                } else {
+                    // Show insufficient balance popup
+                    showPopup();
+                }
+            }
+
+            // Handle hash changes
+            window.addEventListener('hashchange', function() {
+                const hash = window.location.hash;
+                switch(hash) {
+                    case '#projects':
+                        navigateToProjects();
+                        break;
+                    case '#about':
+                        navigateToBalance();
+                        break;
+                    case '#contact':
+                        navigateToContact();
+                        break;
+                }
+            });
+
+            // Check initial hash
+            if (window.location.hash) {
+                window.dispatchEvent(new Event('hashchange'));
+            }
+
+            // Close popup when clicking outside
+            document.getElementById('overlay').addEventListener('click', closePopup);
+        </script>
+
+        <script src="assets/js/main.js"></script>
+
+    </body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw - Not Allowed</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .error-container {
+            background-color: var(--surface-dark);
+            border-radius: 16px;
+            padding: 32px 24px;
+            margin: 32px 0;
+            text-align: center;
+        }
+
+        .error-icon {
+            font-size: 48px;
+            color: #ff4444;
+            margin-bottom: 16px;
+        }
+
+        .error-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ff4444;
+            margin-bottom: 12px;
+        }
+
+        .error-message {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .balance-info {
+            background-color: var(--background-dark);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 24px 0;
+        }
+
+        .balance-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .balance-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .balance-label {
+            color: var(--text-secondary);
+        }
+
+        .balance-value {
+            font-weight: 500;
+        }
+
+        .balance-value.insufficient {
+            color: #ff4444;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .deposit-btn {
+            background-color: var(--primary-color);
+            color: var(--background-dark);
+        }
+
+        .deposit-btn:hover {
+            background-color: #00b34a;
+        }
+
+        .back-btn {
+            background-color: var(--surface-dark);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .back-btn:hover {
+            background-color: var(--background-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header>
+            <div class="back-button" onclick="window.location.href='balance.html'">
+                <i class="fas fa-arrow-left"></i>
+            </div>
+            <h1>Withdraw</h1>
+            <div class="header-actions">
+                <i class="fas fa-question-circle"></i>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <div class="error-container">
+                <div class="error-icon">
+                    <i class="fas fa-circle-exclamation"></i>
+                </div>
+                <div class="error-title">Withdrawal Not Allowed</div>
+                <div class="error-message">
+                    You don't have sufficient funds to make a withdrawal at this time.
+                    Please deposit funds to continue.
+                </div>
+
+                <div class="balance-info">
+                    <div class="balance-row">
+                        <span class="balance-label">Current Balance</span>
+                        <span class="balance-value insufficient" id="current-balance">0.00 USDT</span>
+                    </div>
+                    <div class="balance-row">
+                        <span class="balance-label">Minimum Required</span>
+                        <span class="balance-value">10.00 USDT</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-button deposit-btn" onclick="window.location.href='index.html'">
+                        <i class="fas fa-arrow-down"></i>
+                        Deposit Now
+                    </button>
+                    <button class="action-button back-btn" onclick="window.location.href='balance.html'">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Get wallet state from the main script
+        let walletState = window.opener ? window.opener.walletState : {
+            balance: 0.00
+        };
+
+        // Update balance display
+        function updateBalance() {
+            document.getElementById('current-balance').textContent = `${walletState.balance.toFixed(2)} USDT`;
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBalance();
+        });
+    </script>
+</body>
+</html> 
